@@ -15,7 +15,7 @@ forward the key-value pair to the graphite server.
 
 #### <a name="Configuring_graphite_reporter">Configuring graphite reporter</a> ####
 
-Below is an example of the a graphite reporter application environment, with
+Below is an example of a graphite reporter application environment, with
 its correct location in the hierarchy:
 
 ```erlang
@@ -37,9 +37,9 @@ its correct location in the hierarchy:
 
 The following attributes are available for configuration:
 
-+ `connect_timeout` (milliseconds - default: 5000)<br />Specifies how long the graphie reporter plugin shall wait for a tcp
++ `connect_timeout` (milliseconds - default: 5000)<br />Specifies how long the graphite reporter plugin shall wait for a TCP
 connection to complete before timing out. A timed out connection will
-not be reconnected to automatically. (To be fixed.)
+not be reconnected automatically. (To be fixed.)
 
 + `prefix` (string - default: "")<br />Specifies an optional prefix to prepend all metric names with before
 they are sent to the graphite server.
@@ -50,8 +50,8 @@ they are sent to the graphite server.
 
 + `api_key` (string - default: n/a)<br />Specifies the api key to use when reporting to a hosted graphite server.
 
-If `prefix` is not specified, but `api_key` is, each metrics will be reported as `ApiKey.Metric`.
+If `prefix` is not specified, but `api_key` is, each metric will be reported as `ApiKey.Metric`.
 
-If `prefix` is specified, but `api_key` is not, each metrics will be reported as `Prefix.Metric`.
+If `prefix` is specified, but `api_key` is not, each metric will be reported as `Prefix.Metric`.
 
-if neither `prefix` or `api_key` is specified, each metric will be reported simply as `Metric`.
+if neither `prefix` nor `api_key` is specified, each metric will be reported simply as `Metric`.
