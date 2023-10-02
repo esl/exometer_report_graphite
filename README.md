@@ -26,6 +26,7 @@ its correct location in the hierarchy:
             {exometer_report_graphite, [
                 {connect_timeout, 5000},
                 {prefix, "web_stats"},
+                {env_prefix, "HOSTNAME"},
                 {host, "carbon.hostedgraphite.com"},
                 {port, 2003},
                 {api_key, "267d121c-8387-459a-9326-000000000000"}
@@ -44,14 +45,25 @@ not be reconnected automatically. (To be fixed.)
 + `prefix` (string - default: "")<br />Specifies an optional prefix to prepend all metric names with before
 they are sent to the graphite server.
 
++ `env_prefix` (string - default: "")<br />Specifies an environmental variable name from which an additional prefix
+will be taken. When not set no addional prefix is added.
+In case both `prefix` and `env_prefix` are defined it will be placed __before__ `prefix` and separated with a dot.
+
 + `host` (string - default: "carbon.hostedgraphite.com")<br />Specifies the name (or IP address) of the graphite server to report to.
 
 + `port` (integer - default: 2003)<br />Specifies the TCP port on the given graphite server to connect to.
 
 + `api_key` (string - default: n/a)<br />Specifies the api key to use when reporting to a hosted graphite server.
 
-If `prefix` is not specified, but `api_key` is, each metric will be reported as `ApiKey.Metric`.
+Full metric naming depending on the configuration is as following:
 
-If `prefix` is specified, but `api_key` is not, each metric will be reported as `Prefix.Metric`.
-
-if neither `prefix` nor `api_key` is specified, each metric will be reported simply as `Metric`.
+`api_key` | `env_prefix` | `prefix` | Full metric name
+--------- | ------------ | -------- | ----------------
+&cross;   | &cross;      | &cross;  | `Metric`
+&cross;   | &cross;      | &check;  | `Prefix.Metric`
+&cross;   | &check;      | &cross;  | `EnvPrefix.Metric`
+&cross;   | &check;      | &check;  | `EnvPrefix.Prefix.Metric`
+&check;   | &cross;      | &cross;  | `ApiKey.Metric`
+&check;   | &cross;      | &check;  | `ApiKey.Prefix.Metric`
+&check;   | &check;      | &cross;  | `ApiKey.EnvPrefix.Metric`
+&check;   | &check;      | &check;  | `ApiKey.EnvPrefix.Prefix.Metric`

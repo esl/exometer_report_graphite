@@ -52,13 +52,14 @@ exometer_init(Opts) ->
     ?LOG_INFO("Exometer Graphite Reporter; Opts: ~p~n", [Opts]),
     API_key = get_opt(api_key, Opts),
     Prefix = get_opt(prefix, Opts, []),
+    EnvPrefix = get_opt(env_prefix, Opts, ""),
     Host = get_opt(host, Opts, ?DEFAULT_HOST),
     Port = get_opt(port, Opts, ?DEFAULT_PORT),
     ConnectTimeout = get_opt(connect_timeout, Opts, ?DEFAULT_CONNECT_TIMEOUT),
 
     case gen_tcp:connect(Host, Port,  [{mode, list}], ConnectTimeout) of
         {ok, Sock} ->
-            {ok, #st{prefix = Prefix,
+            {ok, #st{prefix = prefix_with_env_var(EnvPrefix, Prefix),
                      api_key = API_key,
                      socket = Sock,
                      host = Host,
@@ -159,6 +160,12 @@ get_opt(K, Opts) ->
         false  -> error({required, K})
     end.
 
-
 get_opt(K, Opts, Default) ->
     exometer_util:get_opt(K, Opts, Default).
+
+prefix_with_env_var("", Prefix) ->
+    Prefix;
+prefix_with_env_var(VarName, "") ->
+    os:getenv(VarName);
+prefix_with_env_var(VarName, Prefix) ->
+    os:getenv(VarName) ++ "." ++ Prefix.
