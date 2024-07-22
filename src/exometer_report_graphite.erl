@@ -95,6 +95,8 @@ exometer_cast(Unknown, St) ->
     ?LOG_INFO("Unknown cast: ~p", [Unknown]),
     {ok, St}.
 
+exometer_info({tcp_closed, Socket}, #st{socket = Socket}) ->
+    exit(tcp_closed);
 exometer_info(Unknown, St) ->
     ?LOG_INFO("Unknown info: ~p", [Unknown]),
     {ok, St}.
